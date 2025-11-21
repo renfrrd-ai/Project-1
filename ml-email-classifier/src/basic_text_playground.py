@@ -23,6 +23,19 @@ def clean_text(raw_text: str) -> str:
     return text
 
 
+def text_stats(text: str) -> None:
+    print("No of chars: ", len(text))
+    words = text.split()
+    unique_words = list(set(words))
+    print("No of words: ", len(words))
+    print("No of unique words: ", len(unique_words))
+    print("Five sample words: ", unique_words[:5])
+
+
 if __name__ == '__main__':
     email_text = read_email()
-    print(clean_text(email_text))
+    cleaned_text = clean_text(email_text)
+    print("RAW EMAIL:\n{}\n".format(email_text))
+    print("CLEANED EMAIL:\n{}\n".format(cleaned_text))
+    print("STATS:")
+    text_stats(cleaned_text)
