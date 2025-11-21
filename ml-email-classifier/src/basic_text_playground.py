@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 
 def read_email():
@@ -9,6 +10,19 @@ def read_email():
     return text
 
 
+def clean_text(raw_text: str) -> str:
+    raw_text = raw_text.lower()
+    URL_PATTERN = r'https?://\S+|www\.\S+'
+
+    text = re.sub(URL_PATTERN, "", raw_text)
+    text = re.sub(r'\s+', " ", text)
+    text = re.sub("subject:", "", text)  # text is lowercase
+
+    text = text.strip()
+
+    return text
+
+
 if __name__ == '__main__':
     email_text = read_email()
-    print(email_text)
+    print(clean_text(email_text))
