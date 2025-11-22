@@ -4,12 +4,10 @@ import nltk
 from nltk.corpus import stopwords
 
 
-def read_email():
-    email_path = Path(__file__).parent.parent / "data" / \
-        "raw" / 'example_email.txt'
-    with open(email_path, "r", encoding="utf-8") as f:
-        text = f.read()
-    return text
+def read_email(file_path: Path) -> str:
+    """Reads an email file and returns its contents as a string."""
+    with open(file_path, "r", encoding="utf-8") as f:
+        return f.read()
 
 
 def clean_text(raw_text: str) -> str:
@@ -43,13 +41,34 @@ def remove_stopwords(tokens: list[str]) -> list[str]:
     return [token for token in tokens if token not in stopwords.words('english')]
 
 
+def load_dataset() -> tuple[list[str], list[str]]:
+    """Loads all emails, cleans them, and returns (texts, labels)."""
+
+    emails_dir = Path(__file__).parent.parent / "data" / "raw" / "emails"
+
+    texts = []
+    labels = []
+
+    for file_path in emails_dir.iterdir():
+        if file_path.suffix != ".txt":
+            continue
+
+        raw_text = read_email(file_path)
+        cleaned = clean_text(raw_text)
+        texts.append(cleaned)
+
+        if "spam" in file_path.name.lower():
+            labels.append("spam")
+        else:
+            labels.append("ham")
+
+    return texts, labels
+
+
 if __name__ == '__main__':
-    email_text = read_email()
-    cleaned_text = clean_text(email_text)
-    print("RAW EMAIL:\n{}\n".format(email_text))
-    print("CLEANED EMAIL:\n{}\n".format(cleaned_text))
-    print("STATS:")
-    text_stats(cleaned_text)
-    tokens = tokenize(cleaned_text)  # tokenizing text
-    tokens = remove_stopwords(tokens)  # removing stop words from tokens
-    print(tokens[:20])
+    texts, labels = load_dataset()
+    print(f"Loaded {len(texts)} emails")
+    print(f"Spam: {labels.count('spam')}")
+    print(f"Ham: {labels.count('ham')}\n")
+    print("Example spam:\n", texts[labels.index('spam')][:200], "\n")
+    print("Example ham:\n", texts[labels.index('ham')][:200], "\n")
