@@ -1,0 +1,5 @@
+Subject: Immediate Action Required
+
+Your package is on hold due to incomplete payment verification. Confirm your payment information now to avoid delays.
+
+Click here to verify: http://payment-check.fake-site

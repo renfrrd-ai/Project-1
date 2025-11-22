@@ -1,0 +1,10 @@
+Subject: Urgent — Your account has been suspended!
+
+Hello,
+
+We detected unusual activity in your account. Please verify your information immediately to avoid permanent restriction.
+
+Click the link below to restore access:
+http://verify-now.fake-link
+
+Support Team
