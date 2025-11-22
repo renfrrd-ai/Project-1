@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import nltk
 
 
 def read_email():
@@ -32,6 +33,11 @@ def text_stats(text: str) -> None:
     print("Five sample words: ", unique_words[:5])
 
 
+def tokenize(text: str) -> list[str]:
+    tokenized_words = nltk.word_tokenize(text)
+    return tokenized_words
+
+
 if __name__ == '__main__':
     email_text = read_email()
     cleaned_text = clean_text(email_text)
@@ -39,3 +45,5 @@ if __name__ == '__main__':
     print("CLEANED EMAIL:\n{}\n".format(cleaned_text))
     print("STATS:")
     text_stats(cleaned_text)
+    words = tokenize(cleaned_text)
+    print(words[:20])
