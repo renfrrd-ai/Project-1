@@ -1,6 +1,7 @@
 from pathlib import Path
 import re
 import nltk
+from nltk.corpus import stopwords
 
 
 def read_email():
@@ -38,6 +39,10 @@ def tokenize(text: str) -> list[str]:
     return tokenized_words
 
 
+def remove_stopwords(tokens: list[str]) -> list[str]:
+    return [token for token in tokens if token not in stopwords.words('english')]
+
+
 if __name__ == '__main__':
     email_text = read_email()
     cleaned_text = clean_text(email_text)
@@ -45,5 +50,6 @@ if __name__ == '__main__':
     print("CLEANED EMAIL:\n{}\n".format(cleaned_text))
     print("STATS:")
     text_stats(cleaned_text)
-    words = tokenize(cleaned_text)
-    print(words[:20])
+    tokens = tokenize(cleaned_text)  # tokenizing text
+    tokens = remove_stopwords(tokens)  # removing stop words from tokens
+    print(tokens[:20])
