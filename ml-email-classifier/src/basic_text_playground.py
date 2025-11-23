@@ -2,6 +2,9 @@ from pathlib import Path
 import re
 import nltk
 from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.model_selection import train_test_split
 
 
 def read_email(file_path: Path) -> str:
@@ -67,8 +70,12 @@ def load_dataset() -> tuple[list[str], list[str]]:
 
 if __name__ == '__main__':
     texts, labels = load_dataset()
-    print(f"Loaded {len(texts)} emails")
-    print(f"Spam: {labels.count('spam')}")
-    print(f"Ham: {labels.count('ham')}\n")
-    print("Example spam:\n", texts[labels.index('spam')][:200], "\n")
-    print("Example ham:\n", texts[labels.index('ham')][:200], "\n")
+    vectorizer = TfidfVectorizer(stop_words='english')
+    X = vectorizer.fit_transform(texts)
+    # X_train, X_test, y_train, y_test = train_test_split(
+    # X, labels, test_size=0.5, random_state=42)
+    X_train, X_test, y_train, y_test = X, X, labels, labels
+    model = MultinomialNB()
+    model.fit(X_train, y_train)
+    accuracy = model.score(X_test, y_test)
+    print(f"The accuracy of the model is: {accuracy}")
