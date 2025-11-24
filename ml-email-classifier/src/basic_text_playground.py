@@ -81,8 +81,28 @@ def predict_email(text: str) -> str:
     return y_pred[0]
 
 
+def summarize_email(text: str, n_sentences=1) -> str:
+    sentences = nltk.sent_tokenize(text)
+    sentences_scores = {}
+
+    for sentence in sentences:
+        cleaned_sentence = clean_text(sentence)
+        words = nltk.word_tokenize(cleaned_sentence)
+        non_stopwords = [
+            word for word in words if word not in stopwords.words('english')]
+        score = len(non_stopwords)
+        sentences_scores[sentence] = score
+
+    ranked_sentences = sorted(
+        sentences_scores.keys(), key=lambda s: sentences_scores[s], reverse=True)
+
+    return " ".join(ranked_sentences[: n_sentences])
+
+
 if __name__ == '__main__':
-    texts, labels = load_dataset()
-    print("TEST 1:", predict_email(
-        "Your account has been restricted. Verify now."))
-    print("TEST 2:", predict_email("Reminder: meeting tomorrow at 2 PM"))
+    # texts, labels = load_dataset()
+    # print("TEST 1:", predict_email(
+    #     "Your account has been restricted. Verify now."))
+    # print("TEST 2:", predict_email("Reminder: meeting tomorrow at 2 PM"))
+    print(summarize_email(
+        "Your account has been suspended due to unusual activity. Please verify immediately."))
