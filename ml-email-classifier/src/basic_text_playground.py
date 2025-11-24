@@ -5,6 +5,7 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
+import joblib
 
 
 def read_email(file_path: Path) -> str:
@@ -79,3 +80,7 @@ if __name__ == '__main__':
     model.fit(X_train, y_train)
     accuracy = model.score(X_test, y_test)
     print(f"The accuracy of the model is: {accuracy}")
+    joblib.dump(vectorizer, Path(__file__).parent /
+                "models" / "vectorizer.pkl")
+    joblib.dump(model, Path(__file__).parent /
+                "models" / "classifier.pkl")
