@@ -69,18 +69,20 @@ def load_dataset() -> tuple[list[str], list[str]]:
     return texts, labels
 
 
+def predict_email(text: str) -> str:
+    cleaned_text = clean_text(text)
+    vectorizer = joblib.load(Path(__file__).parent /
+                             "models" / "vectorizer.pkl")
+    X = vectorizer.transform([cleaned_text])
+    model = joblib.load(Path(__file__).parent /
+                        "models" / "classifier.pkl")
+    y_pred = model.predict(X)
+
+    return y_pred[0]
+
+
 if __name__ == '__main__':
     texts, labels = load_dataset()
-    vectorizer = TfidfVectorizer(stop_words='english')
-    X = vectorizer.fit_transform(texts)
-    # X_train, X_test, y_train, y_test = train_test_split(
-    # X, labels, test_size=0.5, random_state=42)
-    X_train, X_test, y_train, y_test = X, X, labels, labels
-    model = MultinomialNB()
-    model.fit(X_train, y_train)
-    accuracy = model.score(X_test, y_test)
-    print(f"The accuracy of the model is: {accuracy}")
-    joblib.dump(vectorizer, Path(__file__).parent /
-                "models" / "vectorizer.pkl")
-    joblib.dump(model, Path(__file__).parent /
-                "models" / "classifier.pkl")
+    print("TEST 1:", predict_email(
+        "Your account has been restricted. Verify now."))
+    print("TEST 2:", predict_email("Reminder: meeting tomorrow at 2 PM"))
