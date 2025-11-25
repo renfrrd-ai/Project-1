@@ -71,10 +71,10 @@ def load_dataset() -> tuple[list[str], list[str]]:
 
 def predict_email(text: str) -> str:
     cleaned_text = clean_text(text)
-    vectorizer = joblib.load(Path(__file__).parent /
+    vectorizer = joblib.load(Path(__file__).parent.parent /
                              "models" / "vectorizer.pkl")
     X = vectorizer.transform([cleaned_text])
-    model = joblib.load(Path(__file__).parent /
+    model = joblib.load(Path(__file__).parent.parent /
                         "models" / "classifier.pkl")
     y_pred = model.predict(X)
 
